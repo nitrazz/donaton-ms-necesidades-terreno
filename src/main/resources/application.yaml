@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: donaton-ms-necesidades
+  datasource:
+    url: jdbc:postgresql://localhost:5432/necesidades_db
+    username: postgres
+    password: hola1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+
+server:
+  port: 8083
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
