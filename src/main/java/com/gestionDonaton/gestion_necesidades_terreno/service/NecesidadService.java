@@ -10,24 +10,36 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.gestionDonaton.gestion_necesidades_terreno.dto.NecesidadRequestDTO;
+import com.gestionDonaton.gestion_necesidades_terreno.dto.NecesidadResponseDTO;
+import com.gestionDonaton.gestion_necesidades_terreno.entity.Necesidad;
+import com.gestionDonaton.gestion_necesidades_terreno.repository.NecesidadRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
-@RequiredArgsConstructor
 public class NecesidadService {
 
     private final NecesidadRepository necesidadRepository;
 
+    // Constructor explícito para inyección de Spring (Reemplaza a @RequiredArgsConstructor)
+    @Autowired
+    public NecesidadService(NecesidadRepository necesidadRepository) {
+        this.necesidadRepository = necesidadRepository;
+    }
+
     public NecesidadResponseDTO reportarNecesidad(NecesidadRequestDTO request) {
-        // Mapeamos el DTO a la Entidad
-        Necesidad nuevaNecesidad = Necesidad.builder()
-                .recursoNecesitado(request.getRecursoNecesitado())
-                .cantidad(request.getCantidad())
-                .ubicacionGeografica(request.getUbicacionGeografica())
-                .build();
+        // Instanciación nativa sin usar .builder()
+        Necesidad nuevaNecesidad = new Necesidad(
+                request.getRecursoNecesitado(),
+                request.getCantidad(),
+                request.getUbicacionGeografica()
+        );
 
-        // Guardamos en BD utilizando el Repository Pattern
         Necesidad necesidadGuardada = necesidadRepository.save(nuevaNecesidad);
-
-        // Retornamos la respuesta mapeada a DTO
         return mapToResponseDTO(necesidadGuardada);
     }
 
@@ -37,17 +49,6 @@ public class NecesidadService {
                 .collect(Collectors.toList());
     }
 
-    // Método auxiliar para no repetir código
-    private NecesidadResponseDTO mapToResponseDTO(Necesidad necesidad) {
-        return NecesidadResponseDTO.builder()
-                .id(necesidad.getId())
-                .recursoNecesitado(necesidad.getRecursoNecesitado())
-                .cantidad(necesidad.getCantidad())
-                .ubicacionGeografica(necesidad.getUbicacionGeografica())
-                .estado(necesidad.getEstado())
-                .fechaReporte(necesidad.getFechaReporte())
-                .build();
-    }
     public NecesidadResponseDTO atenderNecesidad(Long id) {
         Necesidad necesidad = necesidadRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se encontró la necesidad con ID: " + id));
@@ -55,5 +56,17 @@ public class NecesidadService {
         necesidad.setEstado("ATENDIDA");
         Necesidad actualizada = necesidadRepository.save(necesidad);
         return mapToResponseDTO(actualizada);
+    }
+
+    // Método auxiliar con constructor nativo sin usar .builder()
+    private NecesidadResponseDTO mapToResponseDTO(Necesidad necesidad) {
+        return new NecesidadResponseDTO(
+                necesidad.getId(),
+                necesidad.getRecursoNecesitado(),
+                necesidad.getCantidad(),
+                necesidad.getUbicacionGeografica(),
+                necesidad.getEstado(),
+                necesidad.getFechaReporte()
+        );
     }
 }
