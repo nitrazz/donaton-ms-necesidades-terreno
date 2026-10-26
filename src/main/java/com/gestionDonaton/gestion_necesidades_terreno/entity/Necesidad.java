@@ -1,17 +1,8 @@
 package com.gestionDonaton.gestion_necesidades_terreno.entity;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "necesidades")
 public class Necesidad {
@@ -21,26 +12,84 @@ public class Necesidad {
     private Long id;
 
     @Column(name = "recurso_necesitado", nullable = false)
-    private String recursoNecesitado; // Ej: "Agua potable", "Mantas"
+    private String recursoNecesitado;
 
     @Column(nullable = false)
     private Integer cantidad;
 
     @Column(name = "ubicacion_geografica", nullable = false)
-    private String ubicacionGeografica; // Dirección o coordenadas
+    private String ubicacionGeografica;
 
     @Column(nullable = false)
-    private String estado; // Ej: "PENDIENTE", "ATENDIDA"
+    private String estado;
 
     @Column(name = "fecha_reporte", updatable = false)
     private LocalDateTime fechaReporte;
 
-    // Se ejecuta automáticamente antes de guardar en la BD por primera vez
+    // Constructor por defecto exigido por JPA
+    public Necesidad() {}
+
+    // Constructor personalizado para instanciación limpia
+    public Necesidad(String recursoNecesitado, Integer cantidad, String ubicacionGeografica) {
+        this.recursoNecesitado = recursoNecesitado;
+        this.cantidad = cantidad;
+        this.ubicacionGeografica = ubicacionGeografica;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.fechaReporte = LocalDateTime.now();
         if (this.estado == null) {
             this.estado = "PENDIENTE";
         }
+    }
+
+    // Getters y Setters explícitos
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getRecursoNecesitado() {
+        return recursoNecesitado;
+    }
+
+    public void setRecursoNecesitado(String recursoNecesitado) {
+        this.recursoNecesitado = recursoNecesitado;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getUbicacionGeografica() {
+        return ubicacionGeografica;
+    }
+
+    public void setUbicacionGeografica(String ubicacionGeografica) {
+        this.ubicacionGeografica = ubicacionGeografica;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaReporte() {
+        return fechaReporte;
+    }
+
+    public void setFechaReporte(LocalDateTime fechaReporte) {
+        this.fechaReporte = fechaReporte;
     }
 }

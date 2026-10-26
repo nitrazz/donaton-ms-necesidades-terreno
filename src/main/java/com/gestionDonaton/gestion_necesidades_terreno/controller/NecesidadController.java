@@ -15,13 +15,33 @@ import org.springframework.web.bind.annotation.*;
 
         import java.util.List;
 
+import com.gestionDonaton.gestion_necesidades_terreno.dto.NecesidadRequestDTO;
+import com.gestionDonaton.gestion_necesidades_terreno.dto.NecesidadResponseDTO;
+import com.gestionDonaton.gestion_necesidades_terreno.service.NecesidadService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/necesidades")
-@RequiredArgsConstructor
 @Tag(name = "Gestión de Necesidades", description = "Endpoints para el reporte, registro y consulta de carencias o necesidades prioritarias")
 public class NecesidadController {
 
     private final NecesidadService necesidadService;
+
+    // Inyección de dependencias explícita mediante constructor
+    @Autowired
+    public NecesidadController(NecesidadService necesidadService) {
+        this.necesidadService = necesidadService;
+    }
 
     @PostMapping
     @Operation(
