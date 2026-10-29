@@ -2,9 +2,9 @@ spring:
   application:
     name: donaton-ms-necesidades
   datasource:
-    url: jdbc:postgresql://TU_IP_O_ENDPOINT_AWS:5432/necesidades_db # Reemplaza por tu IP/DNS de AWS
-    username: postgres # Tu usuario de BD en AWS
-    password: tu_password_aws # Tu contraseña de BD en AWS
+    url: jdbc:postgresql://100.48.180.247:5432/necesidades_db
+    username: postgres
+    password: hola1234
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -13,7 +13,7 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
   rabbitmq:
-    host: 3.80.203.201 # IP del servidor RabbitMQ en AWS
+    host: 100.48.180.247
     port: 5672
     username: guest
     password: guest
